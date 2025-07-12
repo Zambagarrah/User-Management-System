@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.core.mail import send_mail
 
 from .forms import CustomUserCreationForm, EditUserForm, EditProfileForm
 from .models import Profile
+from .decorators import verified_required
 
 def home_view(request):
     return render(request, 'accounts/home.html')
@@ -26,10 +27,16 @@ def register_view(request):
                 [user.email],
                 fail_silently=False,
             )
+            messages.info(request, "📩 Verification code sent to your email.")
             return redirect('login')
     else:
         form = CustomUserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+class CustomLoginView(LoginView):
+    def form_valid(self, form):
+        messages.success(self.request, f"Welcome back, {self.request.user.username}!")
+        return super().form_valid(form)
 
 @login_required
 def profile_view(request):
@@ -90,10 +97,10 @@ def resend_code_view(request):
         [request.user.email],
         fail_silently=False,
     )
-    messages.info(request, "📬 A new verification code has been sent to your email.")
+    messages.info(request, "📬 A new verification code has been sent.")
     return redirect('verify_code')
 
-class CustomLoginView(LoginView):
-    def form_valid(self, form):
-        messages.success(self.request, f"Welcome back, {self.request.user.username}!")
-        return super().form_valid(form)
+@login_required
+@verified_required
+def sensitive_view(request):
+    return render(request, 'accounts/sensitive.html')

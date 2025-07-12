@@ -16,9 +16,21 @@
       margin-top: 2rem;
     }
   </style>
+  <style id="theme-style">
+    body {
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+    .custom-card {
+      background: #f8f9fa;
+      color: #212529;
+    }
+  </style>
+
 </head>
 <body>
   <div class="container">
+    <button id="themeToggle" class="btn btn-sm btn-dark position-fixed top-0 end-0 m-3">🌙 Toggle Theme</button>
     {% if messages %}
       <div class="toast-container position-fixed bottom-0 end-0 p-3">
         {% for message in messages %}
@@ -39,6 +51,17 @@
     const toastElList = [].slice.call(document.querySelectorAll('.toast'));
     toastElList.map(function (toastEl) {
       return new bootstrap.Toast(toastEl).show();
+    });
+    const toggle = document.getElementById('themeToggle');
+    const styleTag = document.getElementById('theme-style');
+    let dark = false;
+
+    toggle.addEventListener('click', () => {
+      dark = !dark;
+      styleTag.innerHTML = dark
+        ? `body { background-color: #212529; color: #212529; }`
+        : `body { background-color: #f8f9fa; color: #212529; }`;
+      toggle.textContent = dark ? "☀️ Light Mode" : "🌙 Dark Mode";
     });
   </script>
 </body>
