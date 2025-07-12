@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-9 col-lg-8">
+    <div class="custom-card p-4">
+      <h2 class="text-primary text-center mb-4">🛠 Update Your Profile</h2>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h5 class="text-muted mb-3">👤 Account Info</h5>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Username</label>
+            {{ u_form.username }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            {{ u_form.email }}
+          </div>
+        </div>
+
+        <hr>
+
+        <h5 class="text-muted mb-3">📸 Profile Info</h5>
+        <div class="text-center mb-3">
+          <img src="{{ user.profile.profile_image.url }}" class="rounded-circle border shadow-sm" width="100" height="100" alt="Profile Photo">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Change Profile Photo</label>
+          {{ p_form.profile_image }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          {{ p_form.full_name }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          {{ p_form.location }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Bio</label>
+          {{ p_form.bio }}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 mt-3">💾 Save Changes</button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <a href="{% url 'change_password' %}" class="btn btn-outline-info btn-sm">🔐 Change Password</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

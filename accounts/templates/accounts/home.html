@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="custom-card text-center">
+      <h2 class="mb-3 text-primary">👋 Welcome to Your Dashboard</h2>
+      {% if user.is_authenticated %}
+        <p class="text-muted">Hello, <strong>{{ user.username }}</strong>! Glad to see you back.</p>
+      {% endif %}
+      <p class="text-muted">Use the shortcuts below to manage users, profiles, and settings.</p>
+
+      <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+        {% if user.is_authenticated %}
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-lg px-4">🚪 Logout</button>
+          </form>
+          <a href="{% url 'profile' %}" class="btn btn-outline-info btn-lg px-4">👤 View Profile</a>
+          <a href="/admin/" class="btn btn-outline-warning btn-lg px-4">🛡️ Admin Panel</a>
+        {% else %}
+          <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg px-4">📝 Register</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-success btn-lg px-4">🔐 Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
